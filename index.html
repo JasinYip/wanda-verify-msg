@@ -6,27 +6,57 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>万达验证信息生成</title>
 </head>
+<style>
+  #result { display: none; }
+  #msg { margin-top: 1rem; }
+</style>
 <body>
   <button id="copy">Copy to clipboard!</button>
-  <span id="result" style="display: none">Copied!</span>
+  <span id="result">Copied!</span>
   <br>
-  <textarea name="msg" id="msg" cols="38" rows="4" style="margin-top: 1rem;">
+  <textarea name="msg" id="msg" cols="38" rows="4" contenteditable="true">
 欢迎你的申请！请按以下步骤验证你的余额：
 1、向你的一个地址转 1000{{randomId}} 枚 ADA；
 2、转账完成后，回复交易 ID。
   </textarea>
   <script>
+    function iosCopyToClipboard (el) {
+      let oldContentEditable = el.contentEditable,
+          oldReadOnly = el.readOnly,
+          range = document.createRange()
+
+      el.contenteditable = true
+      el.readonly = false
+      range.selectNodeContents(el)
+
+      let selection = window.getSelection()
+      selection.removeAllRanges()
+      selection.addRange(range)
+
+      el.setSelectionRange(0, 999999)
+
+      el.contentEditable = oldContentEditable
+      el.readOnly = oldReadOnly
+
+      document.execCommand('Copy')
+    }
+
+    function normalCopy (el) {
+      msgEle.select()
+      document.execCommand('Copy')
+    }
+
     const msgEle = document.getElementById('msg')
     msgEle.value = msgEle.value.replace(
       '{{randomId}}',
-      Math.random().toString().substr(0, 8)
+      Math.random().toString().substr(0, 8).trim()
     )
 
     const copyBtn = document.getElementById('copy')
     const resultSpan = document.getElementById('result')
     copyBtn.addEventListener('click', e => {
-      msgEle.select()
-      document.execCommand("Copy")
+      iosCopyToClipboard(msgEle)
+      normalCopy(msgEle)
       resultSpan.style.display = 'inline'
     })
 
