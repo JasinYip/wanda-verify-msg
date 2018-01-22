@@ -1,0 +1,11 @@
+{
+  "apps": [{
+    "name": "wanda-verify-msg",
+    "exec_mode": "cluster_mode",
+    "script": "index.js"
+  }],
+  "error_file": "/logs/wandaVerifyMsg/err.log",
+  "out_file": "/logs/wandaVerifyMsg/out.log",
+  "merge_logs": true,
+  "log_date_format": "YYYY/MM/DD HH:mm"
+}
